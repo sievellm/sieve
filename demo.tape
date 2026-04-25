@@ -1,11 +1,11 @@
-# Sieve Demo
+# Sievellm Demo
 Output demo.gif
 
-Set FontSize 16
-Set Width 900
-Set Height 600
+Set FontSize 15
+Set Width 700
+Set Height 450
 Set Theme "Catppuccin Mocha"
 
-Type "python3 demo_simple.py"
+Type "python3 demo_advanced.py"
 Enter
-Sleep 8s
+Sleep 20s
