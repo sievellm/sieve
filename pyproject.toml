@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "sieve"
+name = "sievellm"
 version = "0.1.0"
-description = "Smart AI router — filters requests to the right model"
+description = "Smart AI router — filters requests to the right model, saving 40-80% on costs"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"

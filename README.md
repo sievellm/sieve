@@ -2,6 +2,8 @@
 
 **Smart AI router — filters requests to the right model.**
 
+> 🚧 **Early Development** — Works, but evolving. Feedback welcome!
+
 Stop overpaying for AI. Sieve automatically routes simple queries to cheap models and complex ones to capable models, saving you 40-80% on API costs.
 
 ![Sieve Demo](demo.gif)
@@ -9,7 +11,7 @@ Stop overpaying for AI. Sieve automatically routes simple queries to cheap model
 ## Installation
 
 ```bash
-pip install -e .
+pip install sievellm
 ```
 
 ## Quick Start
@@ -27,6 +29,13 @@ response = route("Analyze the trade-offs between microservices and monoliths")
 print(f"Cost: ${response.cost_usd:.4f}")  # ~$0.02
 ```
 
+## Setup
+
+Set your OpenAI API key:
+```bash
+export OPENAI_API_KEY="sk-..."
+```
+
 ## How It Works
 
 1. **Analyzes** your prompt for complexity signals
@@ -36,8 +45,18 @@ print(f"Cost: ${response.cost_usd:.4f}")  # ~$0.02
 ## Try It
 
 ```bash
+git clone https://github.com/krymsnax/sieve
+cd sieve
+pip install -e .
 python3 chat.py
 ```
+
+## Roadmap
+
+- [ ] Anthropic Claude support
+- [ ] Streaming responses
+- [ ] Budget limits
+- [ ] ML-based complexity detection
 
 ## License
 
