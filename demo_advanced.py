@@ -8,11 +8,11 @@ print("  SIEVELLM - Smart AI Router Demo")
 print("=" * 55)
 
 queries = [
-    ("What is 2+2?", "Simple math"),
-    ("Define API", "Simple definition"),
-    ("Translate 'hello' to Spanish", "Simple translation"),
-    ("Explain how OAuth2 authentication flow works step by step", "Complex explanation"),
-    ("Debug: why does recursive fib(n) have O(2^n) complexity?", "Complex analysis"),
+    ("What is 2+2?", "Simple"),
+    ("Define API", "Simple"),
+    ("Translate hello to French", "Simple"),
+    ("Explain OAuth2 flow step by step", "Complex"),
+    ("Debug recursive fib() O(2^n) complexity", "Complex"),
 ]
 
 total_smart = 0
