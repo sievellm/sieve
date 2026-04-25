@@ -1,12 +1,20 @@
-# Sieve
+# Sievellm
 
-**Smart AI router — filters requests to the right model.**
+**Smart AI router — automatically routes to the right model.**
 
-> 🚧 **Early Development** — Works, but evolving. Feedback welcome!
+> 🚧 **Early Development** — Works, feedback welcome!
 
-Stop overpaying for AI. Sieve automatically routes simple queries to cheap models and complex ones to capable models, saving you 40-80% on API costs.
+Stop overpaying for AI. Sievellm uses AI to detect query complexity and routes simple questions to cheap models, complex ones to capable models — saving you 40-80% on API costs.
 
 ![Sieve Demo](demo.gif)
+
+## Why Sievellm?
+
+| | LiteLLM | Sievellm |
+|--|---------|----------|
+| Setup | Docker, Postgres, YAML | `pip install sievellm` |
+| Routing | Manual rules you configure | **AI auto-detects complexity** |
+| Code | Proxy server + config | One line: `route("question")` |
 
 ## Installation
 
@@ -19,44 +27,47 @@ pip install sievellm
 ```python
 from sieve import route
 
-# Simple query → routes to cheap model
+# Simple query → automatically routes to cheap model (gpt-4o-mini)
 response = route("What is 2+2?")
 print(response)  # 4
-print(f"Cost: ${response.cost_usd:.6f}")  # ~$0.000001
+print(f"Model: {response.model_used}")  # gpt-4o-mini
+print(f"Cost: ${response.cost_usd:.6f}")  # ~$0.000007
 
-# Complex query → routes to capable model  
-response = route("Analyze the trade-offs between microservices and monoliths")
-print(f"Cost: ${response.cost_usd:.4f}")  # ~$0.02
+# Complex query → automatically routes to capable model (gpt-4-turbo)
+response = route("Explain the trade-offs between microservices and monoliths")
+print(f"Model: {response.model_used}")  # gpt-4-turbo
 ```
 
 ## Setup
 
-Set your OpenAI API key:
 ```bash
 export OPENAI_API_KEY="sk-..."
 ```
 
 ## How It Works
 
-1. **Analyzes** your prompt for complexity signals
-2. **Routes** to the cheapest model that can handle it
-3. **Tracks** actual cost per request
+1. **AI Classification** — Uses GPT-4o-mini to rate query complexity (costs ~$0.00001)
+2. **Smart Routing** — Routes to cheap/mid/expensive tier based on complexity
+3. **Cost Tracking** — Returns actual cost per request
 
-## Try It
+## Options
 
-```bash
-git clone https://github.com/krymsnax/sieve
-cd sieve
-pip install -e .
-python3 chat.py
+```python
+from sieve import Router
+
+router = Router(
+    smart_routing=True,   # AI-powered (default) or keyword-based
+    force_tier="cheap",   # Force a specific tier (optional)
+)
 ```
 
 ## Roadmap
 
+- [x] AI-powered complexity detection
 - [ ] Anthropic Claude support
+- [ ] Multi-provider routing (cheapest across OpenAI + Anthropic + Google)
 - [ ] Streaming responses
-- [ ] Budget limits
-- [ ] ML-based complexity detection
+- [ ] Budget limits & alerts
 
 ## License
 
