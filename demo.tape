@@ -3,9 +3,10 @@ Output demo.gif
 
 Set FontSize 13
 Set Width 950
-Set Height 700
+Set Height 720
 Set Theme "Catppuccin Mocha"
+Set TypingSpeed 30ms
 
-Type "python3 demo.py"
+Type "cat demo_output.txt"
 Enter
-Sleep 30s
+Sleep 8s

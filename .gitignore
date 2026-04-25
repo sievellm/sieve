@@ -9,3 +9,4 @@ build/
 venv/
 reddit_post.txt
 dist/
+demo_output.txt
