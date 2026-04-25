@@ -19,8 +19,8 @@ total_smart = 0
 total_always_gpt4 = 0
 gpt4_cost_per_1k = (MODELS["gpt-4-turbo"]["input_cost"] + MODELS["gpt-4-turbo"]["output_cost"]) / 2000
 
-print("\n{:<45} {:>8}".format("Query", "Model"))
-print("-" * 55)
+print("\n{:<40} {:>14}".format("Query", "Model"))
+print("-" * 56)
 
 for query, desc in queries:
     r = route(query)
@@ -31,10 +31,10 @@ for query, desc in queries:
     total_always_gpt4 += gpt4_cost
     
     # Truncate query for display
-    display = query[:42] + "..." if len(query) > 45 else query
-    print(f"{display:<45} {r.model_used}")
+    display = query[:37] + "..." if len(query) > 40 else query
+    print(f"{display:<40} {r.model_used:>14}")
 
-print("-" * 55)
+print("-" * 56)
 print(f"\n📊 COST COMPARISON:")
 print(f"   With Sievellm:      ${total_smart:.4f}")
 print(f"   Always GPT-4:       ${total_always_gpt4:.4f}")
