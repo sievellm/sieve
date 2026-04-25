@@ -4,6 +4,8 @@
 
 Stop overpaying for AI. Sieve automatically routes simple queries to cheap models and complex ones to capable models, saving you 40-80% on API costs.
 
+![Sieve Demo](demo.gif)
+
 ## Installation
 
 ```bash
