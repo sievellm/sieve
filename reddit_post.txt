@@ -1,30 +1,50 @@
+TITLE:
+I built an open-source router that cuts my OpenAI API costs by 60%
 
-I built an open-source router that cuts my OpenAI costs by 60% — one line of code
+-------- COPY EVERYTHING BELOW THIS LINE --------
 
+I was burning money sending simple syntax lookups to GPT-4 when GPT-4o-mini could handle them just fine. So I built **sievellm** — an AI-powered router that automatically picks the right model for each query.
 
-I was tired of paying GPT-4 prices for simple lookups while my complex queries actually needed it. So I built **sievellm** — it uses AI to detect query complexity and automatically routes to cheap or expensive models.
+&nbsp;
 
-**How it works:**
-```python
-from sieve import route
+## ⚡ How it works
 
-# Simple lookup → routes to gpt-4o-mini ($0.00001)
-response = route("What's the capital of France?")
+    from sieve import route
+    
+    # Simple question → gpt-4o-mini ($0.00001)
+    route("What does HTTP 403 mean?")
+    
+    # Complex task → gpt-4-turbo ($0.02)  
+    route("Review this auth code for security vulnerabilities")
 
-# Complex analysis → routes to gpt-4-turbo ($0.02)
-response = route("Review this authentication code for security vulnerabilities and suggest fixes")
-```
+One line. No config files. No Docker. No proxy servers.
 
-That's it. No config files, no Docker, no proxy servers.
+&nbsp;
 
-**What makes it different from LiteLLM:**
-- LiteLLM = powerful but heavy (Docker, Postgres, YAML configs)
-- Sievellm = smart but light (`pip install`, one line of code)
+## 🧠 The smart part
 
-It uses GPT-4o-mini to classify query complexity before routing — costs ~$0.00001 extra per request but saves way more by avoiding GPT-4 on simple questions.
+Instead of keyword matching, it uses GPT-4o-mini to classify complexity before routing. Costs \~$0.00001 extra per request — saves way more by avoiding GPT-4 on simple stuff.
 
-**Install:** `pip install sievellm`
+&nbsp;
 
-**GitHub:** https://github.com/sievellm/sieve
+## 📊 vs LiteLLM
 
-Still early (v0.2.0) — would love feedback. What features would make this actually useful for your projects?
+| | LiteLLM | Sievellm |
+|:-|:--------|:---------|
+| Setup | Docker, Postgres, YAML | `pip install` |
+| Routing | Manual rules | AI auto-detects |
+| Code | Proxy + config | One line |
+
+&nbsp;
+
+## 🚀 Try it
+
+    pip install sievellm
+
+**GitHub:** [https://github.com/sievellm/sieve](https://github.com/sievellm/sieve)
+
+&nbsp;
+
+---
+
+Still early (v0.2.0). What features would actually make this useful for you?
