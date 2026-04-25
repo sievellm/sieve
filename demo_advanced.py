@@ -1,43 +1,40 @@
 #!/usr/bin/env python3
-"""Advanced demo showing cost savings."""
+"""Advanced demo showing real developer scenarios with cost savings."""
 from sieve import route
 from sieve.models import MODELS
 
-print("=" * 55)
-print("  SIEVELLM - Smart AI Router Demo")
-print("=" * 55)
+print("=" * 60)
+print("  SIEVELLM v0.3.0 - Multi-Provider AI Router")
+print("  Supports: OpenAI + Anthropic Claude")
+print("=" * 60)
 
 queries = [
-    ("What is 2+2?", "Simple"),
-    ("Define API", "Simple"),
-    ("Translate hello to French", "Simple"),
-    ("Explain OAuth2 flow step by step", "Complex"),
-    ("Debug recursive fib() O(2^n) complexity", "Complex"),
+    "What does HTTP 429 mean?",
+    "Format this date: 2024-01-15",
+    "Convert SQL JOIN to Python dict lookup",
+    "Review this auth flow for OWASP vulnerabilities",
+    "Refactor recursive function to iterative with memoization",
 ]
 
 total_smart = 0
-total_always_gpt4 = 0
-gpt4_cost_per_1k = (MODELS["gpt-4-turbo"]["input_cost"] + MODELS["gpt-4-turbo"]["output_cost"]) / 2000
+total_always_premium = 0
+gpt4_per_token = (MODELS["gpt-4-turbo"]["input_cost"] +
+                  MODELS["gpt-4-turbo"]["output_cost"]) / 2_000_000
 
-print("\n{:<40} {:>14}".format("Query", "Model"))
-print("-" * 56)
+print(f"\n{'Query':<42}{'Model':>16}")
+print("-" * 60)
 
-for query, desc in queries:
+for query in queries:
     r = route(query)
     total_smart += r.cost_usd
-    # Estimate what GPT-4 would have cost
-    tokens = r.input_tokens + r.output_tokens
-    gpt4_cost = tokens * gpt4_cost_per_1k
-    total_always_gpt4 += gpt4_cost
-    
-    # Truncate query for display
-    display = query[:37] + "..." if len(query) > 40 else query
-    print(f"{display:<40} {r.model_used:>14}")
+    total_always_premium += (r.input_tokens + r.output_tokens) * gpt4_per_token
 
-print("-" * 56)
-print(f"\n📊 COST COMPARISON:")
-print(f"   With Sievellm:      ${total_smart:.4f}")
-print(f"   Always GPT-4:       ${total_always_gpt4:.4f}")
-savings = (1 - total_smart/total_always_gpt4) * 100 if total_always_gpt4 > 0 else 0
-print(f"   💰 You saved:        {savings:.0f}%")
-print()
+    display = query[:39] + "..." if len(query) > 42 else query
+    print(f"{display:<42}{r.model_used:>16}")
+
+print("-" * 60)
+savings = (1 - total_smart/total_always_premium) * 100
+print(f"\nWith Sievellm:    ${total_smart:.4f}")
+print(f"Always GPT-4:     ${total_always_premium:.4f}")
+print(f"You saved:        {savings:.0f}%")
+print(f"\nWorks with Claude too: pip install 'sievellm[anthropic]'")

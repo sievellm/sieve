@@ -6,7 +6,7 @@
 
 Stop overpaying for AI. Sievellm uses AI to detect query complexity and routes between OpenAI and Anthropic — saving you 40-80% on API costs.
 
-![Sieve Demo](demo.gif?v=3)
+![Sieve Demo](demo.gif?v=4)
 
 ## Why Sievellm?
 
