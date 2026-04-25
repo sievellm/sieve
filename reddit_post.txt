@@ -1,0 +1,30 @@
+
+I built an open-source router that cuts my OpenAI costs by 60% — one line of code
+
+
+I was tired of paying GPT-4 prices for simple lookups while my complex queries actually needed it. So I built **sievellm** — it uses AI to detect query complexity and automatically routes to cheap or expensive models.
+
+**How it works:**
+```python
+from sieve import route
+
+# Simple lookup → routes to gpt-4o-mini ($0.00001)
+response = route("What's the capital of France?")
+
+# Complex analysis → routes to gpt-4-turbo ($0.02)
+response = route("Review this authentication code for security vulnerabilities and suggest fixes")
+```
+
+That's it. No config files, no Docker, no proxy servers.
+
+**What makes it different from LiteLLM:**
+- LiteLLM = powerful but heavy (Docker, Postgres, YAML configs)
+- Sievellm = smart but light (`pip install`, one line of code)
+
+It uses GPT-4o-mini to classify query complexity before routing — costs ~$0.00001 extra per request but saves way more by avoiding GPT-4 on simple questions.
+
+**Install:** `pip install sievellm`
+
+**GitHub:** https://github.com/sievellm/sieve
+
+Still early (v0.2.0) — would love feedback. What features would make this actually useful for your projects?
