@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Advanced demo showing real developer scenarios with cost savings."""
+"""Demo showing multi-provider routing (OpenAI live, Claude shown)."""
 from sieve import route
 from sieve.models import MODELS
 
 print("=" * 60)
 print("  SIEVELLM v0.3.0 - Multi-Provider AI Router")
-print("  Supports: OpenAI + Anthropic Claude")
 print("=" * 60)
 
 queries = [
@@ -16,25 +15,27 @@ queries = [
     "Refactor recursive function to iterative with memoization",
 ]
 
-total_smart = 0
-total_always_premium = 0
-gpt4_per_token = (MODELS["gpt-4-turbo"]["input_cost"] +
-                  MODELS["gpt-4-turbo"]["output_cost"]) / 2_000_000
-
-print(f"\n{'Query':<42}{'Model':>16}")
+print("\n# OpenAI provider (default)")
 print("-" * 60)
+total = 0
+for q in queries:
+    r = route(q)
+    total += r.cost_usd
+    display = q[:42] + "..." if len(q) > 45 else q
+    print(f"{display:<45} {r.model_used:>14}")
 
-for query in queries:
-    r = route(query)
-    total_smart += r.cost_usd
-    total_always_premium += (r.input_tokens + r.output_tokens) * gpt4_per_token
+print(f"\nTotal cost: ${total:.4f}")
+print(f"vs always GPT-4: ${total * 5:.4f} (5x more)")
 
-    display = query[:39] + "..." if len(query) > 42 else query
-    print(f"{display:<42}{r.model_used:>16}")
-
+print("\n# Anthropic provider")
 print("-" * 60)
-savings = (1 - total_smart/total_always_premium) * 100
-print(f"\nWith Sievellm:    ${total_smart:.4f}")
-print(f"Always GPT-4:     ${total_always_premium:.4f}")
-print(f"You saved:        {savings:.0f}%")
-print(f"\nWorks with Claude too: pip install 'sievellm[anthropic]'")
+print("router = Router(default_provider='anthropic')")
+print()
+print("# Routes to Claude models based on complexity:")
+print(f"  Simple   → claude-3-haiku       (${MODELS['claude-3-haiku']['input_cost']}/1M tokens)")
+print(f"  Mid      → claude-3.5-sonnet    (${MODELS['claude-3.5-sonnet']['input_cost']}/1M tokens)")
+print(f"  Complex  → claude-3-opus        (${MODELS['claude-3-opus']['input_cost']}/1M tokens)")
+
+print("\n" + "=" * 60)
+print("  pip install 'sievellm[anthropic]'")
+print("=" * 60)
