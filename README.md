@@ -1,8 +1,6 @@
 # Sievellm
 
-**Smart AI router — automatically routes to the right model across providers.**
-
-> 🚧 **Early Development** — Works, feedback welcome!
+**Smart AI router — automatically picks the right model for each query.**
 
 Stop overpaying for AI. Sievellm uses AI to detect query complexity and routes between OpenAI and Anthropic — saving you 40-80% on API costs.
 
@@ -13,7 +11,7 @@ Stop overpaying for AI. Sievellm uses AI to detect query complexity and routes b
 | | LiteLLM | Sievellm |
 |--|---------|----------|
 | Setup | Docker, Postgres, YAML | `pip install sievellm` |
-| Routing | Manual rules you configure | **AI auto-detects complexity** |
+| Routing | Manual rules you configure | AI auto-detects complexity |
 | Code | Proxy server + config | One line: `route("question")` |
 | Providers | Many | OpenAI + Anthropic |
 
@@ -29,12 +27,11 @@ pip install "sievellm[anthropic]"     # + Anthropic Claude
 ```python
 from sieve import route
 
-# Simple query → routes to cheap model (gpt-4o-mini)
+# Simple query → routes to cheap model
 response = route("What does HTTP 403 mean?")
 print(response.model_used)  # gpt-4o-mini
-print(response.cost_usd)    # ~$0.000007
 
-# Complex query → routes to capable model (gpt-4-turbo)
+# Complex query → routes to capable model
 response = route("Review this auth code for security vulnerabilities")
 print(response.model_used)  # gpt-4-turbo
 ```
@@ -46,22 +43,15 @@ export OPENAI_API_KEY="sk-..."
 export ANTHROPIC_API_KEY="sk-ant-..."  # optional
 ```
 
-## How It Works
-
-1. **AI Classification** — Uses GPT-4o-mini to rate query complexity (~$0.00001)
-2. **Smart Routing** — Routes to cheap/mid/expensive tier based on complexity
-3. **Multi-Provider** — Choose OpenAI or Anthropic models
-4. **Cost Tracking** — Returns actual cost per request
-
 ## Options
 
 ```python
 from sieve import Router
 
 router = Router(
-    default_provider="anthropic",  # Use Claude by default
-    smart_routing=True,            # AI-powered (default) or keyword-based
-    force_tier="cheap",            # Force a specific tier (optional)
+    default_provider="anthropic",  # Use Claude
+    smart_routing=True,            # AI-powered classification
+    force_tier="cheap",            # Force a tier (optional)
 )
 ```
 

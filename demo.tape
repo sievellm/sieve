@@ -6,6 +6,6 @@ Set Width 900
 Set Height 540
 Set Theme "Catppuccin Mocha"
 
-Type "python3 demo_advanced.py"
+Type "python3 demo.py"
 Enter
 Sleep 25s
