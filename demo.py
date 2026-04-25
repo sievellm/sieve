@@ -1,41 +1,40 @@
 #!/usr/bin/env python3
-"""Demo showing multi-provider routing (OpenAI live, Claude shown)."""
+"""Sievellm demo with live responses."""
 from sieve import route
-from sieve.models import MODELS
 
-print("=" * 60)
-print("  SIEVELLM v0.3.0 - Multi-Provider AI Router")
-print("=" * 60)
+print("\033[1;36m╭" + "─" * 58 + "╮\033[0m")
+print("\033[1;36m│\033[0m  \033[1mSIEVELLM\033[0m - Smart AI Router (OpenAI + Anthropic)" + "      \033[1;36m│\033[0m")
+print("\033[1;36m╰" + "─" * 58 + "╯\033[0m")
 
 queries = [
-    "What does HTTP 429 mean?",
-    "Format this date: 2024-01-15",
-    "Convert SQL JOIN to Python dict lookup",
-    "Review this auth flow for OWASP vulnerabilities",
-    "Refactor recursive function to iterative with memoization",
+    ("What does HTTP 429 mean?", "🟢 Simple"),
+    ("Convert 'snake_case' to 'camelCase' in Python", "🟢 Simple"),
+    ("Explain race conditions in async code", "🟡 Medium"),
+    ("Review this auth code for OWASP vulnerabilities", "🔴 Complex"),
 ]
 
-print("\n# OpenAI provider (default)")
-print("-" * 60)
-total = 0
-for q in queries:
-    r = route(q)
-    total += r.cost_usd
-    display = q[:42] + "..." if len(q) > 45 else q
-    print(f"{display:<45} {r.model_used:>14}")
+total_cost = 0
+gpt4_cost = 0
 
-print(f"\nTotal cost: ${total:.4f}")
-print(f"vs always GPT-4: ${total * 5:.4f} (5x more)")
+for query, badge in queries:
+    r = route(query)
+    total_cost += r.cost_usd
+    # Estimate GPT-4 cost (~5x more expensive)
+    gpt4_cost += r.cost_usd * 5
+    
+    print(f"\n\033[1m{badge}  {query}\033[0m")
+    print(f"  \033[2m→ Routed to: \033[36m{r.model_used}\033[0m \033[2m(${r.cost_usd:.5f})\033[0m")
+    
+    # Show truncated response
+    response = r.content.replace("\n", " ").strip()
+    if len(response) > 80:
+        response = response[:77] + "..."
+    print(f"  \033[2m💬 {response}\033[0m")
 
-print("\n# Anthropic provider")
-print("-" * 60)
-print("router = Router(default_provider='anthropic')")
-print()
-print("# Routes to Claude models based on complexity:")
-print(f"  Simple   → claude-3-haiku       (${MODELS['claude-3-haiku']['input_cost']}/1M tokens)")
-print(f"  Mid      → claude-3.5-sonnet    (${MODELS['claude-3.5-sonnet']['input_cost']}/1M tokens)")
-print(f"  Complex  → claude-3-opus        (${MODELS['claude-3-opus']['input_cost']}/1M tokens)")
-
-print("\n" + "=" * 60)
-print("  pip install 'sievellm[anthropic]'")
-print("=" * 60)
+print("\n\033[1;32m" + "═" * 60 + "\033[0m")
+savings = (1 - total_cost/gpt4_cost) * 100
+print(f"\033[1m📊 Cost Summary\033[0m")
+print(f"   Sievellm:    \033[1;32m${total_cost:.4f}\033[0m")
+print(f"   Always GPT-4: \033[1;31m${gpt4_cost:.4f}\033[0m")
+print(f"   \033[1;33m💰 Saved {savings:.0f}%\033[0m")
+print("\033[1;32m" + "═" * 60 + "\033[0m\n")
