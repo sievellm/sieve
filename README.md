@@ -6,7 +6,7 @@
 
 Stop overpaying for AI. Sievellm uses AI to detect query complexity and routes simple questions to cheap models, complex ones to capable models — saving you 40-80% on API costs.
 
-![Sieve Demo](demo.gif)
+![Sieve Demo](demo.gif?v=3)
 
 ## Why Sievellm?
 
