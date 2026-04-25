@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 from openai import OpenAI
 
-from .complexity import estimate_complexity, complexity_to_tier
+from .complexity import estimate_complexity, complexity_to_tier, estimate_complexity_keywords
 from .models import MODELS, get_cheapest_in_tier
 
 
@@ -40,6 +40,7 @@ class Router:
         openai_api_key: str | None = None,
         default_provider: str = "openai",
         force_tier: str | None = None,
+        smart_routing: bool = True,
     ):
         """
         Initialize the router.
@@ -48,6 +49,7 @@ class Router:
             openai_api_key: OpenAI API key (defaults to OPENAI_API_KEY env var)
             default_provider: Preferred provider ("openai" or "anthropic")
             force_tier: Force a specific tier ("cheap", "mid", "expensive")
+            smart_routing: Use AI to classify complexity (smarter, costs ~$0.00001 extra per request)
         """
         self.api_key = openai_api_key or os.getenv("OPENAI_API_KEY")
         if not self.api_key:
@@ -58,6 +60,7 @@ class Router:
         self.client = OpenAI(api_key=self.api_key)
         self.default_provider = default_provider
         self.force_tier = force_tier
+        self.smart_routing = smart_routing
     
     def route(
         self,
@@ -76,8 +79,11 @@ class Router:
         Returns:
             RouterResponse with content, model used, and cost info
         """
-        # Determine complexity
-        complexity = estimate_complexity(prompt)
+        # Determine complexity (AI-powered or keyword-based)
+        if self.smart_routing:
+            complexity = estimate_complexity(prompt, client=self.client, use_ai=True)
+        else:
+            complexity = estimate_complexity_keywords(prompt)
         
         # Select model
         if force_model:
